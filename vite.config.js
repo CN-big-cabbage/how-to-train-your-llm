@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  base: '/how-to-train-your-llm/',
+  base: '/',
   root: '.',
   publicDir: 'public',
   build: {
