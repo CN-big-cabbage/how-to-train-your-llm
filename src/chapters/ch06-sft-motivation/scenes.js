@@ -46,7 +46,7 @@ export default [
       function renderRound() {
         const round = rounds[roundIdx]
         roundLabel.textContent = ctx.i18n.t('ch06.s02_round', { current: roundIdx + 1, total: rounds.length })
-        promptEl.textContent = ctx.i18n.t('ch06.s02_prompt_label') + ' ' + round.prompt
+        promptEl.textContent = ctx.i18n.t('ch06.s02_prompt_label') + ' ' + ctx.i18n.t('ch06.comp' + (roundIdx + 1) + '_prompt')
         feedbackEl.textContent = ''
 
         // Remove any leftover next button
@@ -62,11 +62,11 @@ export default [
           prompt: null,
           responseA: {
             label: ctx.i18n.t('ch06.s02_response_a'),
-            text: sftIsA ? round.sft : round.base
+            text: sftIsA ? ctx.i18n.t('ch06.comp' + (roundIdx + 1) + '_sft') : ctx.i18n.t('ch06.comp' + (roundIdx + 1) + '_base')
           },
           responseB: {
             label: ctx.i18n.t('ch06.s02_response_b'),
-            text: sftIsA ? round.base : round.sft
+            text: sftIsA ? ctx.i18n.t('ch06.comp' + (roundIdx + 1) + '_base') : ctx.i18n.t('ch06.comp' + (roundIdx + 1) + '_sft')
           },
           typewriter: true,
           onPick: (picked) => {
@@ -79,7 +79,7 @@ export default [
             feedbackEl.textContent = (isCorrect
               ? ctx.i18n.t('ch06.s02_correct')
               : ctx.i18n.t('ch06.s02_wrong'))
-              + ' ' + round.explanation
+              + ' ' + ctx.i18n.t('ch06.comp' + (roundIdx + 1) + '_explanation')
             feedbackEl.className = 'fade-in'
 
             // Next button
@@ -158,9 +158,9 @@ export default [
         c.font = 'bold 16px LXGW WenKai, sans-serif'
         c.textAlign = 'center'
         c.fillStyle = '#D4645C'
-        c.fillText('Base Model', halfW / 2, 25)
+        c.fillText(ctx.i18n.t('ch06.s04_base_model'), halfW / 2, 25)
         c.fillStyle = '#5BA55B'
-        c.fillText('SFT Model', halfW + halfW / 2, 25)
+        c.fillText(ctx.i18n.t('ch06.s04_sft_model'), halfW + halfW / 2, 25)
 
         // Divider
         c.strokeStyle = '#ddd'
@@ -176,7 +176,7 @@ export default [
         c.font = '12px JetBrains Mono, monospace'
         c.fillStyle = '#888'
         c.textAlign = 'center'
-        c.fillText('Input: "Write me an email"', w / 2, 50)
+        c.fillText(ctx.i18n.t('ch06.s04_input_example'), w / 2, 50)
 
         // Base model: chaotic particles (left half)
         baseParticles.forEach(p => {

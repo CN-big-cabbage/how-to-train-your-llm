@@ -102,7 +102,7 @@ export default [
           c.font = '13px LXGW WenKai, cursive'
           c.fillStyle = '#888'
           c.textAlign = 'left'
-          c.fillText(`Bigram: "${round.bigramPrev}" →`, 20, barAreaY - 4)
+          c.fillText(ctx.i18n.t('ch02.s02_bigram_prev', { prev: round.bigramPrev }), 20, barAreaY - 4)
 
           round.options.forEach((opt, i) => {
             const oy = barAreaY + 12 + i * barGap
@@ -213,7 +213,7 @@ export default [
         if (picked === round.correct) playerScore++
         if (round.bigramChoice === round.correct) bigramScore++
 
-        feedbackEl.textContent = round.explanation
+        feedbackEl.textContent = ctx.i18n.t('ch02.explanation_' + (roundIdx + 1))
 
         // Next button
         const nextBtn = document.createElement('button')

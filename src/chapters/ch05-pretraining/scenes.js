@@ -22,11 +22,11 @@ export default [
       let modelSize = 12
 
       const outputMilestones = [
-        { step: 0,  text: trainingData.sampleOutputs.step0 },
-        { step: 3,  text: trainingData.sampleOutputs.step100 },
-        { step: 6,  text: trainingData.sampleOutputs.step500 },
-        { step: 10, text: trainingData.sampleOutputs.step2000 },
-        { step: 14, text: trainingData.sampleOutputs.step5000 },
+        { step: 0,  text: ctx.i18n.t('ch05.sample_step0') },
+        { step: 3,  text: ctx.i18n.t('ch05.sample_step100') },
+        { step: 6,  text: ctx.i18n.t('ch05.sample_step500') },
+        { step: 10, text: ctx.i18n.t('ch05.sample_step2000') },
+        { step: 14, text: ctx.i18n.t('ch05.sample_step5000') },
       ]
 
       function getLoss(step) {
@@ -62,13 +62,13 @@ export default [
         c.font = '12px JetBrains Mono, monospace'
         c.fillStyle = '#888'
         c.textAlign = 'right'
-        c.fillText('Loss', curveX - 5, 30)
+        c.fillText(ctx.i18n.t('ch05.chart_loss'), curveX - 5, 30)
         c.fillText('8.0', curveX - 5, 35)
         c.fillText('0', curveX - 5, curveH - 2)
 
         // X-axis label
         c.textAlign = 'center'
-        c.fillText('Training Steps \u2192', curveX + curveW / 2, curveH + 18)
+        c.fillText(ctx.i18n.t('ch05.chart_training_steps'), curveX + curveW / 2, curveH + 18)
 
         // Draw loss curve
         if (lossPoints.length > 1) {
@@ -140,7 +140,7 @@ export default [
             label: ctx.i18n.t('ch05.s02_data_label'),
             type: 'select',
             value: 'wikipedia',
-            options: trainingData.dataSources.map(d => ({ label: d.icon + ' ' + d.name, value: d.id }))
+            options: trainingData.dataSources.map(d => ({ label: d.icon + ' ' + ctx.i18n.t('ch05.ds_' + d.id + '_name'), value: d.id }))
           },
           {
             key: 'lr',
@@ -254,9 +254,9 @@ export default [
         c.font = '12px JetBrains Mono, monospace'
         c.fillStyle = '#888'
         c.textAlign = 'center'
-        c.fillText('Compute \u2192', curveX + curveW / 2, h - 10)
+        c.fillText(ctx.i18n.t('ch05.chart_compute'), curveX + curveW / 2, h - 10)
         c.textAlign = 'right'
-        c.fillText('Loss', curveX - 5, curveTop + 10)
+        c.fillText(ctx.i18n.t('ch05.chart_loss'), curveX - 5, curveTop + 10)
 
         // 3 model curves: small (red), medium (blue), large (green)
         const models = [
@@ -351,13 +351,13 @@ export default [
       const ab = createABCompare(sv.canvasWrap, {
         prompt: null,
         responseA: {
-          label: 'Base Model',
-          text: trainingData.pretrainedOutputs.writeEmail +
-                '\n' + trainingData.pretrainedOutputs.writeEmailContinued + '...'
+          label: ctx.i18n.t('ch05.s05_base_model'),
+          text: ctx.i18n.t('ch05.email_base') +
+                '\n' + ctx.i18n.t('ch05.email_base_cont') + '...'
         },
         responseB: {
-          label: 'What you wanted',
-          text: 'Subject: Meeting Follow-up\n\nHi team,\n\nHere\'s a summary of today\'s meeting:\n- Q3 revenue is up 12%\n- New product launch on track\n- Next review: Thursday 2pm\n\nBest,\nSarah'
+          label: ctx.i18n.t('ch05.s05_what_you_wanted'),
+          text: ctx.i18n.t('ch05.email_wanted')
         },
         typewriter: true
       })

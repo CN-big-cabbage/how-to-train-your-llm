@@ -41,7 +41,7 @@ export default [
         c.font = '13px JetBrains Mono, monospace'
         c.fillStyle = '#4A90D9'
         c.textAlign = 'center'
-        c.fillText('📋 ' + task.instruction, w / 2, 48, w - 60)
+        c.fillText('📋 ' + ctx.i18n.t('ch07.task' + (taskIdx + 1) + '_instruction'), w / 2, 48, w - 60)
 
         // Ranking slots
         const slotLabels = [
@@ -64,7 +64,8 @@ export default [
 
           if (rankings[i]) {
             const resp = rankings[i]
-            const preview = resp.text.substring(0, 55) + (resp.text.length > 55 ? '…' : '')
+            const rtext = ctx.i18n.t('ch07.task' + (taskIdx + 1) + '_resp_' + resp.id + '_text')
+            const preview = rtext.substring(0, 55) + (rtext.length > 55 ? '…' : '')
             c.font = '12px JetBrains Mono, monospace'
             c.fillStyle = '#2D2D2D'
             c.textAlign = 'left'
@@ -82,7 +83,7 @@ export default [
               c.font = '11px JetBrains Mono, monospace'
               c.fillStyle = iconColor
               c.textAlign = 'left'
-              c.fillText(resp.reason, 30, y + 46, w - 70)
+              c.fillText(ctx.i18n.t('ch07.task' + (taskIdx + 1) + '_resp_' + resp.id + '_reason'), 30, y + 46, w - 70)
             }
           } else {
             // Empty slot label
@@ -135,7 +136,7 @@ export default [
           current: taskIdx + 1,
           total: tasks.length,
         })
-        instrEl.textContent = ctx.i18n.t('ch07.s02_instruction_label') + ' ' + task.instruction
+        instrEl.textContent = ctx.i18n.t('ch07.s02_instruction_label') + ' ' + ctx.i18n.t('ch07.task' + (taskIdx + 1) + '_instruction')
         feedbackEl.textContent = ''
         cardsDiv.innerHTML = ''
 
@@ -146,7 +147,7 @@ export default [
           const card = document.createElement('div')
           card.className = 'choice-card'
           card.style.cssText = 'text-align: left; font-size: 14px; white-space: pre-wrap; padding: 10px 14px; cursor: pointer;'
-          card.textContent = resp.text
+          card.textContent = ctx.i18n.t('ch07.task' + (taskIdx + 1) + '_resp_' + resp.id + '_text')
 
           card.addEventListener('click', () => {
             if (revealed || rankings.includes(resp)) return
@@ -183,7 +184,7 @@ export default [
           const posLabel = i === 0 ? ctx.i18n.t('ch07.s02_rank_best')
             : i === 1 ? ctx.i18n.t('ch07.s02_rank_ok')
             : ctx.i18n.t('ch07.s02_rank_worst')
-          fb += '\n' + posLabel + ': ' + r.reason
+          fb += '\n' + posLabel + ': ' + ctx.i18n.t('ch07.task' + (taskIdx + 1) + '_resp_' + r.id + '_reason')
         })
         feedbackEl.textContent = fb
         feedbackEl.className = 'fade-in'
@@ -269,7 +270,7 @@ export default [
         c.font = 'bold 13px JetBrains Mono, monospace'
         c.fillStyle = '#888'
         c.textAlign = 'center'
-        c.fillText('"' + disagreement.instruction + '"', w / 2, 28, w - 20)
+        c.fillText('"' + ctx.i18n.t('ch07.disagreement_instruction') + '"', w / 2, 28, w - 20)
 
         // 3 annotator cards side by side
         const cardGap = 10
@@ -312,7 +313,7 @@ export default [
           // Pick text
           c.font = '10px JetBrains Mono, monospace'
           c.fillStyle = '#555'
-          const lines = wrapText(ann.pick, cardW - 14)
+          const lines = wrapText(ctx.i18n.t('ch07.annotator' + (i + 1) + '_pick'), cardW - 14)
           lines.slice(0, 6).forEach((line, li) => {
             c.fillText(line, cx, avatarY + 62 + li * 15, cardW - 14)
           })
@@ -320,7 +321,7 @@ export default [
           // Reasoning tag at bottom
           c.font = 'italic 10px JetBrains Mono, monospace'
           c.fillStyle = ann.color
-          c.fillText(ann.reasoning, cx, cardY + cardH - 12, cardW - 14)
+          c.fillText(ctx.i18n.t('ch07.annotator' + (i + 1) + '_reasoning'), cx, cardY + cardH - 12, cardW - 14)
         })
 
         c.restore()
@@ -342,7 +343,7 @@ export default [
       sv.panel.appendChild(q2)
 
       const answer = document.createElement('p')
-      answer.textContent = "Who's right? Nobody — that's the point. Annotators bring their own values and perspectives. SFT can only teach the model to mimic examples. It can't resolve genuine disagreements about what 'good' means."
+      answer.textContent = ctx.i18n.t('ch07.s04_answer')
       answer.style.cssText = 'font-size: 14px; color: var(--text-muted); margin-top: 8px;'
       sv.panel.appendChild(answer)
 

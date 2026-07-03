@@ -60,7 +60,7 @@ export default [
         c.font = 'bold 16px LXGW WenKai'
         c.fillStyle = '#888'
         c.textAlign = 'center'
-        c.fillText('Reward Model', w / 2, 25)
+        c.fillText(ctx.i18n.t('ch08.s02_reward_model'), w / 2, 25)
 
         // Draw neural network
         const netH = h * 0.55
@@ -151,7 +151,7 @@ export default [
       function renderRound() {
         const round = rounds[roundIdx]
         roundLabel.textContent = ctx.i18n.t('ch08.s02_round', { current: roundIdx + 1, total: rounds.length })
-        promptEl.textContent = ctx.i18n.t('ch08.s02_prompt_label') + ' ' + round.prompt
+        promptEl.textContent = ctx.i18n.t('ch08.s02_prompt_label') + ' ' + ctx.i18n.t('ch08.round' + (roundIdx + 1) + '_prompt')
         feedbackEl.textContent = ''
         cardsDiv.innerHTML = ''
 
@@ -174,8 +174,8 @@ export default [
           return card
         }
 
-        const cardA = makeCard(ctx.i18n.t('ch08.s02_response_a'), round.responseA, 'A')
-        const cardB = makeCard(ctx.i18n.t('ch08.s02_response_b'), round.responseB, 'B')
+        const cardA = makeCard(ctx.i18n.t('ch08.s02_response_a'), ctx.i18n.t('ch08.round' + (roundIdx + 1) + '_responseA'), 'A')
+        const cardB = makeCard(ctx.i18n.t('ch08.s02_response_b'), ctx.i18n.t('ch08.round' + (roundIdx + 1) + '_responseB'), 'B')
         cardsDiv.appendChild(cardA)
         cardsDiv.appendChild(cardB)
       }
@@ -193,7 +193,7 @@ export default [
         const isCorrect = picked === round.better
         feedbackEl.textContent = (isCorrect
           ? ctx.i18n.t('ch08.s02_correct')
-          : ctx.i18n.t('ch08.s02_different')) + ' ' + round.reason
+          : ctx.i18n.t('ch08.s02_different')) + ' ' + ctx.i18n.t('ch08.round' + (roundIdx + 1) + '_reason')
         feedbackEl.className = 'fade-in'
 
         // Highlight correct/wrong cards
@@ -316,7 +316,7 @@ export default [
           c.strokeRect(hx - 2, gaugeY - 2, gaugeW + 4, gaugeH + 4)
           c.font = 'bold 20px LXGW WenKai'
           c.fillStyle = '#D4645C'
-          c.fillText('⚠️ REWARD HACKING!', w / 2, gaugeY + gaugeH + 55)
+          c.fillText(ctx.i18n.t('ch08.s04_reward_hacking'), w / 2, gaugeY + gaugeH + 55)
         }
 
         // Response text previews
@@ -325,18 +325,18 @@ export default [
         c.font = '12px JetBrains Mono'
         c.fillStyle = '#666'
         c.textAlign = 'left'
-        c.fillText('Honest:', 20, previewY)
+        c.fillText(ctx.i18n.t('ch08.s04_honest_short'), 20, previewY)
         c.font = '11px JetBrains Mono'
-        const honestLines = wrapText(c, rewardHacking.honest, gaugeW - 10)
+        const honestLines = wrapText(c, ctx.i18n.t('ch08.rewardHacking_honest'), gaugeW - 10)
         honestLines.slice(0, 3).forEach((line, i) => {
           c.fillText(line, 20, previewY + 18 + i * 15)
         })
 
         c.font = '12px JetBrains Mono'
         c.fillStyle = '#666'
-        c.fillText('Hacked:', hx, previewY)
+        c.fillText(ctx.i18n.t('ch08.s04_hacked_short'), hx, previewY)
         c.font = '11px JetBrains Mono'
-        const hackedLines = wrapText(c, rewardHacking.hacked, gaugeW - 10)
+        const hackedLines = wrapText(c, ctx.i18n.t('ch08.rewardHacking_hacked'), gaugeW - 10)
         hackedLines.slice(0, 3).forEach((line, i) => {
           c.fillText(line, hx, previewY + 18 + i * 15)
         })
@@ -356,12 +356,12 @@ export default [
 
       const raceBtn = document.createElement('button')
       raceBtn.className = 'scene-btn'
-      raceBtn.textContent = 'Race! →'
+      raceBtn.textContent = ctx.i18n.t('ch08.s04_race_btn')
       sv.panel.appendChild(raceBtn)
 
       const desc2 = document.createElement('p')
       desc2.style.cssText = 'font-size: 16px; color: var(--text-muted); min-height: 40px; display: none;'
-      desc2.textContent = rewardHacking.explanation
+      desc2.textContent = ctx.i18n.t('ch08.rewardHacking_explanation')
       sv.panel.appendChild(desc2)
 
       raceBtn.addEventListener('click', async () => {

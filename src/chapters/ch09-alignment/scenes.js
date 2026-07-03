@@ -123,13 +123,13 @@ export default [
       const scenariosDiv = document.createElement('div')
       scenariosDiv.style.cssText = 'display: flex; flex-direction: column; gap: 8px; margin: 12px 0;'
 
-      const scenarioCards = alignData.scenarios.map(sc => {
+      const scenarioCards = alignData.scenarios.map((sc, i) => {
         const card = document.createElement('div')
         card.style.cssText = 'padding: 8px 12px; border: 1.5px solid var(--text-muted); border-radius: 8px; font-size: 13px;'
 
         const prompt = document.createElement('div')
         prompt.style.cssText = 'font-weight: bold; font-size: 12px; color: var(--accent); margin-bottom: 4px;'
-        prompt.textContent = sc.prompt
+        prompt.textContent = ctx.i18n.t('ch09.scenario' + (i + 1) + '_prompt')
 
         const response = document.createElement('div')
         response.style.cssText = 'color: var(--text); font-family: var(--font-mono); font-size: 12px; white-space: pre-wrap;'
@@ -137,7 +137,7 @@ export default [
         card.appendChild(prompt)
         card.appendChild(response)
         scenariosDiv.appendChild(card)
-        return { card, response, scenario: sc }
+        return { card, response, scenario: sc, index: i }
       })
 
       sv.panel.appendChild(scenariosDiv)
@@ -146,13 +146,13 @@ export default [
         const h = values.helpfulness
         const s = values.harmlessness
 
-        scenarioCards.forEach(({ response, scenario }) => {
+        scenarioCards.forEach(({ response, index }) => {
           if (h > 70 && s < 40) {
-            response.textContent = scenario.responses.helpful_high
+            response.textContent = ctx.i18n.t('ch09.scenario' + (index + 1) + '_helpful_high')
           } else if (s > 70 && h < 40) {
-            response.textContent = scenario.responses.safe_high
+            response.textContent = ctx.i18n.t('ch09.scenario' + (index + 1) + '_safe_high')
           } else {
-            response.textContent = scenario.responses.balanced
+            response.textContent = ctx.i18n.t('ch09.scenario' + (index + 1) + '_balanced')
           }
         })
 
@@ -205,13 +205,13 @@ export default [
       let currentStepIdx = 0
 
       const pipelineStages = [
-        { id: 'tokenize',    label: 'Tokenize',    color: '#4A90D9', chapter: 'Ch1' },
-        { id: 'embed',       label: 'Embed',       color: '#4A90D9', chapter: 'Ch1' },
-        { id: 'attention',   label: 'Attention',   color: '#4A90D9', chapter: 'Ch3' },
-        { id: 'transformer', label: 'Transformer', color: '#4A90D9', chapter: 'Ch4' },
-        { id: 'pretrain',    label: 'Pretrain',    color: '#4A90D9', chapter: 'Ch5' },
-        { id: 'sft',         label: 'SFT',         color: '#5BA55B', chapter: 'Ch6-7' },
-        { id: 'rlhf',        label: 'RLHF',        color: '#E8913A', chapter: 'Ch8-9' },
+        { id: 'tokenize',    labelKey: 'ch09.s05_stage_tokenize',    color: '#4A90D9', chapter: 'Ch1' },
+        { id: 'embed',       labelKey: 'ch09.s05_stage_embed',       color: '#4A90D9', chapter: 'Ch1' },
+        { id: 'attention',   labelKey: 'ch09.s05_stage_attention',   color: '#4A90D9', chapter: 'Ch3' },
+        { id: 'transformer', labelKey: 'ch09.s05_stage_transformer', color: '#4A90D9', chapter: 'Ch4' },
+        { id: 'pretrain',    labelKey: 'ch09.s05_stage_pretrain',    color: '#4A90D9', chapter: 'Ch5' },
+        { id: 'sft',         labelKey: 'ch09.s05_stage_sft',         color: '#5BA55B', chapter: 'Ch6-7' },
+        { id: 'rlhf',        labelKey: 'ch09.s05_stage_rlhf',        color: '#E8913A', chapter: 'Ch8-9' },
       ]
 
       function draw() {
@@ -246,7 +246,7 @@ export default [
           c.font = isActive ? 'bold 14px JetBrains Mono' : '13px JetBrains Mono'
           c.fillStyle = isActive ? '#fff' : (isPast ? stage.color : '#888')
           c.textAlign = 'center'
-          c.fillText(`${stage.chapter}: ${stage.label}`, w / 2, y + blockH / 2 + 4)
+          c.fillText(`${stage.chapter}: ${ctx.i18n.t(stage.labelKey)}`, w / 2, y + blockH / 2 + 4)
 
           // Arrow connector
           if (i < pipelineStages.length - 1) {
@@ -274,10 +274,10 @@ export default [
 
       const steps = pipelineStages.map((stage, i) => ({
         id: stage.id,
-        label: `${stage.chapter}: ${stage.label}`,
+        label: `${stage.chapter}: ${ctx.i18n.t(stage.labelKey)}`,
         description: i === pipelineStages.length - 1
           ? ctx.i18n.t('ch09.s06_text2')
-          : `Stage ${i + 1}: ${stage.label}`,
+          : ctx.i18n.t('ch09.s05_stage_desc', { n: i + 1, label: ctx.i18n.t(stage.labelKey) }),
         color: stage.color
       }))
 

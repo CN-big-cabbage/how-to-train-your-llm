@@ -92,13 +92,13 @@ export default [
         c.font = '13px LXGW WenKai, cursive'
         c.fillStyle = '#888'
         c.textAlign = 'center'
-        c.fillText(`Click tokens to draw attention from "${sent.queryWord}"`, w / 2, h * 0.15)
+        c.fillText(ctx.i18n.t('ch03.s01_canvas_hint', { word: sent.queryWord }), w / 2, h * 0.15)
 
         if (revealed) {
           c.fillStyle = '#4A90D9'
-          c.fillText('Blue = your guesses', w * 0.3, h * 0.85)
+          c.fillText(ctx.i18n.t('ch03.s01_legend_you'), w * 0.3, h * 0.85)
           c.fillStyle = '#5BA55B'
-          c.fillText('Green = model attention', w * 0.7, h * 0.85)
+          c.fillText(ctx.i18n.t('ch03.s01_legend_model'), w * 0.7, h * 0.85)
         }
 
         c.restore()
@@ -164,7 +164,7 @@ export default [
         checkBtn.style.display = ''
         checkBtn.onclick = () => {
           revealed = true
-          feedbackEl.textContent = sent.explanation
+          feedbackEl.textContent = ctx.i18n.t('ch03.explanation_' + (sentIdx + 1))
           feedbackEl.className = 'fade-in'
 
           if (sentIdx < sentences.length - 1) {
@@ -319,7 +319,7 @@ export default [
           c.font = '13px JetBrains Mono, monospace'
           c.fillStyle = '#888'
           c.textAlign = 'center'
-          c.fillText('Output Vectors:', w / 2, outY)
+          c.fillText(ctx.i18n.t('ch03.s04_output_vectors'), w / 2, outY)
           tokens.forEach((tok, i) => {
             const x = startX + i * tokenW + tokenW / 2
             c.fillStyle = '#4A90D9'
@@ -334,11 +334,11 @@ export default [
       }
 
       const steps = [
-        { id: 'q', label: '1. Query Vectors', description: 'Each token creates a Query vector — "What am I looking for?"', color: '#4A90D9' },
-        { id: 'k', label: '2. Key Vectors', description: 'Each token also creates a Key vector — "What do I contain?"', color: '#5BA55B' },
-        { id: 'dot', label: '3. Dot Products', description: 'Query · Key = similarity score. Higher score = more relevant.', color: '#E8913A' },
-        { id: 'soft', label: '4. Softmax', description: 'Scores are normalized to probabilities. They must sum to 100%.', color: '#4A90D9' },
-        { id: 'out', label: '5. Weighted Sum', description: "Each token's output is a weighted sum of all Value vectors, using the attention weights.", color: '#5BA55B' },
+        { id: 'q', label: ctx.i18n.t('ch03.s04_step1_label'), description: ctx.i18n.t('ch03.s04_step1_desc'), color: '#4A90D9' },
+        { id: 'k', label: ctx.i18n.t('ch03.s04_step2_label'), description: ctx.i18n.t('ch03.s04_step2_desc'), color: '#5BA55B' },
+        { id: 'dot', label: ctx.i18n.t('ch03.s04_step3_label'), description: ctx.i18n.t('ch03.s04_step3_desc'), color: '#E8913A' },
+        { id: 'soft', label: ctx.i18n.t('ch03.s04_step4_label'), description: ctx.i18n.t('ch03.s04_step4_desc'), color: '#4A90D9' },
+        { id: 'out', label: ctx.i18n.t('ch03.s04_step5_label'), description: ctx.i18n.t('ch03.s04_step5_desc'), color: '#5BA55B' },
       ]
 
       const stepper = createStepThrough(sv.panel, {
@@ -451,7 +451,7 @@ export default [
         c.font = 'bold 16px LXGW WenKai, cursive'
         c.fillStyle = color
         c.textAlign = 'center'
-        c.fillText(`Head ${activeHead + 1}: ${head.name}`, w / 2, 30)
+        c.fillText(ctx.i18n.t('ch03.s05_head_label', { n: activeHead + 1, name: ctx.i18n.t('ch03.head_name_' + (activeHead + 1)) }), w / 2, 30)
 
         c.restore()
         animFrame = requestAnimationFrame(draw)
@@ -471,20 +471,20 @@ export default [
       headBtns.style.cssText = 'display: flex; gap: 8px; margin: 16px 0; flex-wrap: wrap;'
 
       const headDesc = document.createElement('p')
-      headDesc.textContent = heads[0].description
+      headDesc.textContent = ctx.i18n.t('ch03.head_desc_1')
       headDesc.style.cssText = 'color: var(--text-muted); font-size: 16px; margin-bottom: 20px;'
 
       heads.forEach((head, i) => {
         const btn = document.createElement('button')
         btn.className = 'choice-card'
         if (i === 0) btn.classList.add('selected')
-        btn.textContent = `Head ${i + 1}: ${head.name}`
+        btn.textContent = ctx.i18n.t('ch03.s05_head_label', { n: i + 1, name: ctx.i18n.t('ch03.head_name_' + (i + 1)) })
         btn.style.cssText = `font-size: 14px; padding: 8px 14px; border-color: ${headColors[i]};`
         btn.addEventListener('click', () => {
           headBtns.querySelectorAll('.choice-card').forEach(b => b.classList.remove('selected'))
           btn.classList.add('selected')
           activeHead = i
-          headDesc.textContent = head.description
+          headDesc.textContent = ctx.i18n.t('ch03.head_desc_' + (i + 1))
         })
         headBtns.appendChild(btn)
       })

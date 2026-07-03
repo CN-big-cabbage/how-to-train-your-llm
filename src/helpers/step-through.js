@@ -11,6 +11,8 @@ export function createStepThrough(panel, { steps, onStep, i18n }) {
   let currentStep = 0
   let destroyed = false
 
+  const tr = (key, fallback) => (i18n ? i18n.t(key) : fallback)
+
   const wrapper = document.createElement('div')
   wrapper.className = 'step-through'
   panel.appendChild(wrapper)
@@ -60,7 +62,7 @@ export function createStepThrough(panel, { steps, onStep, i18n }) {
     if (currentStep > 0) {
       const prevBtn = document.createElement('button')
       prevBtn.className = 'scene-btn'
-      prevBtn.textContent = '← Back'
+      prevBtn.textContent = tr('common.back', '← Back')
       prevBtn.style.opacity = '0.6'
       prevBtn.addEventListener('click', () => prev())
       nav.appendChild(prevBtn)
@@ -68,7 +70,9 @@ export function createStepThrough(panel, { steps, onStep, i18n }) {
 
     const nextBtn = document.createElement('button')
     nextBtn.className = 'scene-btn'
-    nextBtn.textContent = currentStep < steps.length - 1 ? 'Next Step →' : 'Done →'
+    nextBtn.textContent = currentStep < steps.length - 1
+      ? tr('common.next_step', 'Next Step →')
+      : tr('common.done', 'Done →')
     nextBtn.addEventListener('click', () => {
       if (currentStep < steps.length - 1) next()
       else onStep?.(currentStep, { ...step, done: true })
