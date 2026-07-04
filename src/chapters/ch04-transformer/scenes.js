@@ -33,7 +33,7 @@ export default [
       const puzzle = createDragPuzzle(sv.canvasWrap, {
         items: partsData.components.map(c => ({
           id: c.id,
-          label: c.name,
+          label: ctx.i18n.t('ch04.comp_' + c.id + '_name'),
           color: c.color,
           correctSlot: 'slot-' + c.order
         })),
@@ -120,7 +120,7 @@ export default [
           c.font = isActive ? 'bold 14px JetBrains Mono' : '13px JetBrains Mono'
           c.fillStyle = isActive ? '#fff' : '#888'
           c.textAlign = 'center'
-          c.fillText(step.stage, w / 2, y + blockH / 2 + 4)
+          c.fillText(ctx.i18n.t('ch04.stage_' + step.stage.toLowerCase()), w / 2, y + blockH / 2 + 4)
 
           // Arrow between blocks
           if (i < steps.length - 1) {
@@ -158,8 +158,8 @@ export default [
 
       const stepperSteps = steps.map((step, i) => ({
         id: step.stage.toLowerCase(),
-        label: ctx.i18n.t('ch04.s04_step', { current: i + 1, total: steps.length, stage: step.stage }),
-        description: step.description,
+        label: ctx.i18n.t('ch04.s04_step', { current: i + 1, total: steps.length, stage: ctx.i18n.t('ch04.stage_' + step.stage.toLowerCase()) }),
+        description: ctx.i18n.t('ch04.stage_' + step.stage.toLowerCase() + '_desc'),
         color: stageColors[i]
       }))
 
@@ -226,14 +226,14 @@ export default [
           c.font = '14px LXGW WenKai'
           c.fillStyle = '#888'
           c.textAlign = 'center'
-          c.fillText(`... ${layerCount - maxVisible} more layers ...`, w / 2, startY - 10)
+          c.fillText(ctx.i18n.t('ch04.s05_more_layers', { n: layerCount - maxVisible }), w / 2, startY - 10)
         }
 
         // Layer count label
         c.font = 'bold 28px LXGW WenKai'
         c.fillStyle = '#2D2D2D'
         c.textAlign = 'center'
-        c.fillText(`${layerCount} layer${layerCount > 1 ? 's' : ''}`, w / 2, h - 15)
+        c.fillText(ctx.i18n.t(layerCount === 1 ? 'ch04.s05_layer_count_one' : 'ch04.s05_layer_count', { n: layerCount }), w / 2, h - 15)
 
         c.restore()
         animFrame = requestAnimationFrame(draw)
@@ -258,7 +258,7 @@ export default [
 
       const stackBtn = document.createElement('button')
       stackBtn.className = 'scene-btn'
-      stackBtn.textContent = 'Stack →'
+      stackBtn.textContent = ctx.i18n.t('ch04.s05_stack_btn')
       stackBtn.addEventListener('click', async () => {
         stageIdx++
         if (stageIdx < layerStages.length) {

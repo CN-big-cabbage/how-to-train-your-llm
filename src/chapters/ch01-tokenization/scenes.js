@@ -172,7 +172,7 @@ export default [
           c.font = 'bold 16px JetBrains Mono, monospace'
           c.textAlign = 'center'
           c.fillStyle = '#888'
-          c.fillText('Final tokens:', w / 2, 40)
+          c.fillText(ctx.i18n.t('ch01.s03_final_tokens'), w / 2, 40)
 
           c.font = '15px JetBrains Mono, monospace'
           let x = 30, y = 70
@@ -197,7 +197,7 @@ export default [
           c.font = 'bold 14px JetBrains Mono, monospace'
           c.fillStyle = '#4A90D9'
           c.textAlign = 'left'
-          c.fillText(`${initialTokens.length} → ${tokens.length} tokens`, 20, 22)
+          c.fillText(ctx.i18n.t('ch01.s03_compression', { from: initialTokens.length, to: tokens.length }), 20, 22)
 
           // Show current tokens; highlight the mergeable pair
           const step = mergeSteps[mergeIndex]
@@ -264,7 +264,7 @@ export default [
 
       const mergeBtn = document.createElement('button')
       mergeBtn.className = 'scene-btn glow-pulse'
-      mergeBtn.textContent = 'Merge! →'
+      mergeBtn.textContent = ctx.i18n.t('ch01.s03_merge_btn')
       sv.panel.appendChild(mergeBtn)
 
       function updatePanel() {
@@ -355,7 +355,7 @@ export default [
           c.font = '14px JetBrains Mono, monospace'
           c.fillStyle = '#888'
           c.textAlign = 'center'
-          c.fillText('Token boundaries:', w / 2, h * 0.3)
+          c.fillText(ctx.i18n.t('ch01.s04_token_boundaries'), w / 2, h * 0.3)
 
           // Draw each token as a colored segment
           c.font = 'bold 28px JetBrains Mono, monospace'
@@ -393,11 +393,11 @@ export default [
       }
 
       // Build prediction game rounds from surprising examples
-      const rounds = bpeData.surprisingExamples.map(ex => ({
-        prompt: `"${ex.text}" — How many tokens?`,
+      const rounds = bpeData.surprisingExamples.map((ex, i) => ({
+        prompt: ctx.i18n.t('ch01.s04_howmany', { word: ex.text }),
         choices: ['1', '2', '3', '4+'],
         correct: ex.tokens.length >= 4 ? 3 : ex.tokens.length - 1,
-        explanation: ex.note,
+        explanation: ctx.i18n.t('ch01.note_' + (i + 1)),
         _word: ex.text,
         _tokens: ex.tokens
       }))
@@ -420,7 +420,7 @@ export default [
         onComplete: (score, total) => {
           const msg = document.createElement('p')
           msg.className = 'fade-in'
-          msg.textContent = `${score}/${total} correct!`
+          msg.textContent = ctx.i18n.t('ch01.s04_score', { score, total })
           sv.panel.appendChild(msg)
 
           const advBtn = document.createElement('button')

@@ -1,20 +1,30 @@
 import { createSplitView } from '../../helpers/split-view.js'
 import completionsData from './data/completions.json'
 
-function findCompletion(prompt) {
+// Returns the i18n key of the completion output for a given prompt
+function findCompletionKey(prompt) {
   const lower = prompt.toLowerCase().trim()
-  const match = completionsData.completions.find(c =>
+  const idx = completionsData.completions.findIndex(c =>
     lower.startsWith(c.prompt.toLowerCase().substring(0, 10))
   )
-  return match || { prompt, output: completionsData.fallback.output }
+  return idx >= 0 ? `ch00.c${idx + 1}_output` : 'ch00.fallback_output'
 }
 
 // Helpers
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)) }
 
+// Split text into streaming display units: CJK per-character, others per word
+function splitUnits(str) {
+  return str.match(/[一-鿿]|[^\s一-鿿]+/g) || []
+}
+function isCJK(str) { return /[一-鿿]/.test(str) }
+
 function generateCandidates(chosen) {
   // Generate 4 fake candidates with the real one being most probable
-  const fakes = ['the', 'a', 'and', 'to', 'in', 'of', 'is', 'it', 'was', 'for']
+  const pool = isCJK(chosen)
+    ? ['的', '了', '是', '在', '和', '有', '人', '我', '他', '说']
+    : ['the', 'a', 'and', 'to', 'in', 'of', 'is', 'it', 'was', 'for']
+  const fakes = pool
     .filter(w => w !== chosen.toLowerCase())
     .sort(() => Math.random() - 0.5)
     .slice(0, 3)
@@ -173,16 +183,16 @@ export default [
         tokens.length = 0
         candidateBars = []
 
-        const prompt = input.value.trim() || 'Once upon a time'
-        const completion = findCompletion(prompt)
+        const prompt = input.value.trim() || i18n.t('ch00.default_prompt')
+        const outputText = i18n.t(findCompletionKey(prompt))
 
         // Show prompt tokens first
-        prompt.split(' ').forEach(word => {
-          tokens.push({ text: word + ' ', age: 100 })
+        splitUnits(prompt).forEach(word => {
+          tokens.push({ text: word + (isCJK(word) ? '' : ' '), age: 100 })
         })
 
         // Simulate token-by-token generation
-        const words = completion.output.split(' ')
+        const words = splitUnits(outputText)
         for (let i = 0; i < words.length; i++) {
           // Show candidate bars briefly
           const chosen = words[i]
@@ -199,7 +209,7 @@ export default [
           await sleep(80)
 
           // Add token
-          tokens.push({ text: (i > 0 ? ' ' : '') + chosen, age: 0 })
+          tokens.push({ text: (i > 0 && !isCJK(chosen) ? ' ' : '') + chosen, age: 0 })
           candidateBars = []
           await sleep(60)
         }

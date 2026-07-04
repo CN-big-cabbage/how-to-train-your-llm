@@ -26,6 +26,14 @@ const CHAPTERS = [
   () => import('./chapters/ch09-alignment/index.js'),
 ]
 
+// Detect initial locale from the browser: Chinese browsers default to 'zh', otherwise 'en'
+function detectLocale() {
+  const langs = navigator.languages && navigator.languages.length
+    ? navigator.languages
+    : [navigator.language || navigator.userLanguage || '']
+  return langs.some(l => l.toLowerCase().startsWith('zh')) ? 'zh' : 'en'
+}
+
 async function boot() {
   // 1. Core services
   const bus = new EventBus()
@@ -33,8 +41,8 @@ async function boot() {
   const state = new StateManager()
   const audio = new AudioManager()
 
-  // 2. Load locale
-  await i18n.load(state.getSetting('locale') || 'en')
+  // 2. Load locale — saved preference wins, otherwise detect from browser language
+  await i18n.load(state.getSetting('locale') || detectLocale())
 
   // 3. Engine
   const engine = new Engine(document.getElementById('stage'))

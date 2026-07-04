@@ -2,6 +2,8 @@
 
 An interactive explorable explanation that teaches how large language models are trained — from raw text to aligned assistant — through hands-on game mechanics.
 
+**English** · [中文](./README.zh.md)
+
 **[Play it live →](https://airingursb.github.io/how-to-train-your-llm)**
 
 ## What You'll Learn
